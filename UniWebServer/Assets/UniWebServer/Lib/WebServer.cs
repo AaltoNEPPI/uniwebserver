@@ -116,8 +116,9 @@ namespace UniWebServer
 
             
             req.stream = stream;
-            if (req.headers.Contains ("Content-Length")) {
-                var count = int.Parse (req.headers.Get ("Content-Length"));
+            string contentLength = req.headers.Get("Content-Length");
+            if (contentLength != null) {
+                var count = int.Parse (contentLength);
                 var bytes = new byte[count];
 				var offset = 0;
 				while (count > 0) {
@@ -126,8 +127,9 @@ namespace UniWebServer
 				}
                 req.body = System.Text.Encoding.UTF8.GetString(bytes);
             }
-				
-            if (req.headers.Get ("Content-Type").Contains ("multipart/form-data")) {
+
+            string[] contentTypes = req.headers.GetValues("Content-Type");
+            if (contentTypes != null && Array.IndexOf(contentTypes, "multipart/form-data") >= 0) {
                 req.formData = MultiPartEntry.Parse (req);
             }
             

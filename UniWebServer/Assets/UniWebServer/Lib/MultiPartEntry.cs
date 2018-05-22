@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -24,8 +25,8 @@ namespace UniWebServer
         public static Dictionary<string, MultiPartEntry> Parse (Request request)
         {
             var mps = new Dictionary<string, MultiPartEntry> ();
-            var contentType = request.headers.Get ("Content-Type");
-            if (contentType.Contains ("multipart/form-data")) {
+            var contentType = request.headers.GetValues ("Content-Type");
+            if (Array.IndexOf(contentType, "multipart/form-data") >= 0) {
                 
                 var boundary = request.body.Substring(0, request.body.IndexOf("\r\n")) + "\r\n";
                 var parts = request.body.Split (new string[] { boundary }, System.StringSplitOptions.RemoveEmptyEntries);
@@ -37,7 +38,7 @@ namespace UniWebServer
                     var mp = new MultiPartEntry ();
                     mp.headers.Read (headerText);
                     mp.Value = part.Substring (sep);
-                    if (mp.headers.Contains ("Content-Disposition")) {
+                    if (mp.headers.Get ("Content-Disposition") != null) {
                         var s = mp.headers.Get ("Content-Disposition");
                         var nm = new Regex (@"(?<=name\=\"")(.*?)(?=\"")").Match (s);
                         if (nm.Success)
