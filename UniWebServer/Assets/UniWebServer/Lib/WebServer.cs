@@ -23,6 +23,16 @@ namespace UniWebServer
         ThreadedTaskQueue taskq;
         TcpListener listener;
 
+        public WebServer (int port, int workerThreads, bool processRequestsInMainThread)
+        {
+            this.port = port;
+            this.workerThreads = workerThreads + 1;
+            this.processRequestsInMainThread = processRequestsInMainThread;
+            if (processRequestsInMainThread) {
+                mainThreadRequests = new Queue<HttpRequest> ();
+            }
+        }
+
         public void Start ()
         {
             listener = new TcpListener (System.Net.IPAddress.Any, port);
@@ -41,16 +51,6 @@ namespace UniWebServer
                 mainThreadRequests.Clear ();
             taskq = null;
             listener = null;
-        }
-
-        public WebServer (int port, int workerThreads, bool processRequestsInMainThread)
-        {
-            this.port = port;
-            this.workerThreads = workerThreads + 1;
-            this.processRequestsInMainThread = processRequestsInMainThread;
-            if (processRequestsInMainThread) {
-                mainThreadRequests = new Queue<HttpRequest> ();
-            }
         }
 
         public void ProcessRequests ()
