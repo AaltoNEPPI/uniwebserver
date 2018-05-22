@@ -129,10 +129,12 @@ namespace UniWebServer
                 var count = int.Parse (contentLength);
                 var bytes = new byte[count];
                 var offset = 0;
-                while (count > 0) {
-                    offset = stream.Read (bytes, offset, count);
-                    count -= offset;
-                }
+                int len = -1;
+                do {
+                    len = stream.Read (bytes, offset, count);
+                    offset += len;
+                    count -= len;
+                } while (len > 0 && count > 0);
                 req.body = System.Text.Encoding.UTF8.GetString(bytes);
             }
 
