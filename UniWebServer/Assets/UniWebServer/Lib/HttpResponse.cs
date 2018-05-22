@@ -15,8 +15,8 @@ namespace UniWebServer
 
     public class HttpResponse
     {
-        public int StatusCode = 404;
-        public string StatusDescription = "Not Found";
+        public int StatusCode = 200;
+        public string StatusDescription = "OK";
         public Headers Headers;
         public bool HeadersWritten { get; private set; }
         public MemoryStream stream;  // XXX: To be renamed later
