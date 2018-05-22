@@ -51,12 +51,12 @@ namespace UniWebServer
                 try {
                     resources [request.Url.LocalPath].HandleRequest (request, response);
                 } catch (Exception e) {
-                    response.statusCode = 500;
+                    response.StatusCode = 500;
                     response.Write (e.Message);
                 }
             } else {
-                response.statusCode = 404;
-                response.message = "Not Found.";
+                response.StatusCode = 404;
+                response.StatusDescription = "Not Found.";
                 response.Write (request.Url.LocalPath + " not found.");
             }
         }

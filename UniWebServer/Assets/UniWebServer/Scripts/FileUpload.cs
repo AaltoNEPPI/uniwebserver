@@ -17,11 +17,11 @@ namespace UniWebServer
             server = GetComponent<EmbeddedWebServerComponent>();
             server.AddResource(path, this);
         }
-	
+
         public void HandleRequest (HttpRequest request, HttpResponse response)
         {
-            response.statusCode = 200;
-			response.message = "OK.";
+            response.StatusCode = 200;
+            response.StatusDescription = "OK.";
             response.Write(html.text);
         }
 

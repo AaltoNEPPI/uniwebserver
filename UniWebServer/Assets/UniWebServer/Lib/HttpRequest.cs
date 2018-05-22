@@ -27,7 +27,7 @@ namespace UniWebServer
             StreamWriter writer = new StreamWriter (InputStream);
             Headers.Set("Connection", "Close");
             Headers.Set("Content-Length", response.stream.Length);
-            writer.Write ("HTTP/1.1 {0} {1}\r\n{2}\r\n\r\n", response.statusCode, response.message, response.headers);
+            writer.Write ("HTTP/1.1 {0} {1}\r\n{2}\r\n\r\n", response.StatusCode, response.StatusDescription, response.Headers);
             response.stream.Seek(0, SeekOrigin.Begin);
             StreamReader reader = new StreamReader (response.stream);
             writer.Write(reader.ReadToEnd());

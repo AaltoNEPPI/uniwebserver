@@ -158,7 +158,7 @@ namespace UniWebServer
             request.Write (response);
             request.Close ();
             if (logRequests) {
-                Debug.Log (response.statusCode + " " + request.RawUrl);
+                Debug.Log (response.StatusCode + " " + request.RawUrl);
             }
         }
 
