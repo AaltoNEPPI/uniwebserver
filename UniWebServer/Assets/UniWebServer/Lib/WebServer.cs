@@ -105,10 +105,14 @@ namespace UniWebServer
             var req = new HttpRequest () {
                 HttpMethod = top [0], RawUrl = top [1], protocol = top [2]
             };
-            if (req.RawUrl.StartsWith ("http://"))
+            // XXX: Should use a regex to check for the scheme, could also be e.g. https://
+            if (req.RawUrl.StartsWith ("http://")) {
+                // .NET API specifies that the RawURL starts with the path
+                req.RawUrl = req.RawUrl.Remove(0, "http://".Length);
                 req.Url = new Uri (req.RawUrl);
-            else
+            } else {
                 req.Url = new Uri ("http://" + System.Net.IPAddress.Any + ":" + port + req.RawUrl);
+            }
 
             while(true) {
                 var headerline = ReadLine(stream);
