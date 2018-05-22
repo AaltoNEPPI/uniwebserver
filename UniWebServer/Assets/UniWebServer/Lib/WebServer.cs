@@ -102,21 +102,23 @@ namespace UniWebServer
             if (top.Length != 3)
                 return;
            
-            var req = new HttpRequest () { method = top [0], path = top [1], protocol = top [2] };
-            if (req.path.StartsWith ("http://"))
-                req.uri = new Uri (req.path);
+            var req = new HttpRequest () {
+                HttpMethod = top [0], RawUrl = top [1], protocol = top [2]
+            };
+            if (req.RawUrl.StartsWith ("http://"))
+                req.Url = new Uri (req.RawUrl);
             else
-                req.uri = new Uri ("http://" + System.Net.IPAddress.Any + ":" + port + req.path);
+                req.Url = new Uri ("http://" + System.Net.IPAddress.Any + ":" + port + req.RawUrl);
 
             while(true) {
                 var headerline = ReadLine(stream);
                 if(headerline.Length == 0) break;
-                req.headers.AddHeaderLine(headerline);
+                req.Headers.AddHeaderLine(headerline);
             }
 
             
-            req.stream = stream;
-            string contentLength = req.headers.Get("Content-Length");
+            req.InputStream = stream;
+            string contentLength = req.Headers.Get("Content-Length");
             if (contentLength != null) {
                 var count = int.Parse (contentLength);
                 var bytes = new byte[count];
@@ -128,7 +130,7 @@ namespace UniWebServer
                 req.body = System.Text.Encoding.UTF8.GetString(bytes);
             }
 
-            string[] contentTypes = req.headers.GetValues("Content-Type");
+            string[] contentTypes = req.Headers.GetValues("Content-Type");
             if (contentTypes != null && Array.IndexOf(contentTypes, "multipart/form-data") >= 0) {
                 req.formData = MultiPartEntry.Parse (req);
             }
@@ -152,7 +154,7 @@ namespace UniWebServer
             request.Write (response);
             request.Close ();
             if (logRequests) {
-                Debug.Log (response.statusCode + " " + request.path);
+                Debug.Log (response.statusCode + " " + request.RawUrl);
             }
         }
 

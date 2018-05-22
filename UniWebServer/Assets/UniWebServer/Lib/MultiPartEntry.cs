@@ -25,7 +25,7 @@ namespace UniWebServer
         public static Dictionary<string, MultiPartEntry> Parse (HttpRequest request)
         {
             var mps = new Dictionary<string, MultiPartEntry> ();
-            var contentType = request.headers.GetValues ("Content-Type");
+            var contentType = request.Headers.GetValues ("Content-Type");
             if (Array.IndexOf(contentType, "multipart/form-data") >= 0) {
                 
                 var boundary = request.body.Substring(0, request.body.IndexOf("\r\n")) + "\r\n";
