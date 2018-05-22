@@ -8,7 +8,7 @@ using System;
 
 namespace UniWebServer
 {
-    public class Request
+    public class HttpRequest
     {
         public string method, path, protocol, query, fragment;
         public Uri uri;

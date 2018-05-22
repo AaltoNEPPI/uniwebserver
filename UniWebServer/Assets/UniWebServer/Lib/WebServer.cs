@@ -17,7 +17,7 @@ namespace UniWebServer
         public readonly bool processRequestsInMainThread = true;
         public bool logRequests = true;
 
-        public event System.Action<Request,Response> HandleRequest;
+        public event System.Action<HttpRequest,Response> HandleRequest;
 
         public void Start ()
         {
@@ -45,7 +45,7 @@ namespace UniWebServer
             this.workerThreads = workerThreads + 1;
             this.processRequestsInMainThread = processRequestsInMainThread;
             if (processRequestsInMainThread) {
-                mainThreadRequests = new Queue<Request> ();
+                mainThreadRequests = new Queue<HttpRequest> ();
             }
         }
 
@@ -102,7 +102,7 @@ namespace UniWebServer
             if (top.Length != 3)
                 return;
            
-            var req = new Request () { method = top [0], path = top [1], protocol = top [2] };
+            var req = new HttpRequest () { method = top [0], path = top [1], protocol = top [2] };
             if (req.path.StartsWith ("http://"))
                 req.uri = new Uri (req.path);
             else
@@ -144,7 +144,7 @@ namespace UniWebServer
             
         }
 
-        void ProcessRequest (Request request, Response response)
+        void ProcessRequest (HttpRequest request, Response response)
         {
             if (HandleRequest != null) {
                 HandleRequest (request, response);
@@ -156,7 +156,7 @@ namespace UniWebServer
             }
         }
 
-        Queue<Request> mainThreadRequests;
+        Queue<HttpRequest> mainThreadRequests;
         ThreadedTaskQueue taskq;
         TcpListener listener;
     }

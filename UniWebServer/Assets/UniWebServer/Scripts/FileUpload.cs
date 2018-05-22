@@ -18,7 +18,7 @@ namespace UniWebServer
             server.AddResource(path, this);
         }
 	
-        public void HandleRequest (Request request, Response response)
+        public void HandleRequest (HttpRequest request, Response response)
         {
             response.statusCode = 200;
 			response.message = "OK.";

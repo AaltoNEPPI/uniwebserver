@@ -22,7 +22,7 @@ namespace UniWebServer
             this.headers = new Headers ();
         }
 
-        public static Dictionary<string, MultiPartEntry> Parse (Request request)
+        public static Dictionary<string, MultiPartEntry> Parse (HttpRequest request)
         {
             var mps = new Dictionary<string, MultiPartEntry> ();
             var contentType = request.headers.GetValues ("Content-Type");

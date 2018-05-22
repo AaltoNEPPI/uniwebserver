@@ -6,7 +6,7 @@ namespace UniWebServer
 {
 	public interface IWebResource
 	{
-        void HandleRequest(Request request, Response response);
+        void HandleRequest(HttpRequest request, Response response);
 	}
 
 }
