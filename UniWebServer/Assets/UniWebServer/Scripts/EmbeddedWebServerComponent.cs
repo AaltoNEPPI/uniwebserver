@@ -45,7 +45,7 @@ namespace UniWebServer
             }
         }
 
-        void HandleRequest (HttpRequest request, Response response)
+        void HandleRequest (HttpRequest request, HttpResponse response)
         {
             if (resources.ContainsKey (request.uri.LocalPath)) {
                 try {

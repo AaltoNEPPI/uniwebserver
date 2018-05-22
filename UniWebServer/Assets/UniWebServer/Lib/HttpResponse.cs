@@ -8,7 +8,7 @@ using System.IO;
 namespace UniWebServer
 {
 
-    public class Response
+    public class HttpResponse
     {
         public int statusCode = 404;
         public string message = "Not Found";
@@ -16,7 +16,7 @@ namespace UniWebServer
         public MemoryStream stream;
         public StreamWriter writer;
 
-        public Response ()
+        public HttpResponse ()
         {
             stream = new MemoryStream();
             writer = new StreamWriter (stream);

@@ -17,7 +17,7 @@ namespace UniWebServer
         public NetworkStream stream;
         public Dictionary<string, MultiPartEntry> formData = null;
 
-        public void Write (Response response)
+        public void Write (HttpResponse response)
         {
             StreamWriter writer = new StreamWriter (stream);
             headers.Set("Connection", "Close");

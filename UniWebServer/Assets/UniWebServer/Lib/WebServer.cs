@@ -17,7 +17,7 @@ namespace UniWebServer
         public readonly bool processRequestsInMainThread = true;
         public bool logRequests = true;
 
-        public event System.Action<HttpRequest,Response> HandleRequest;
+        public event System.Action<HttpRequest,HttpResponse> HandleRequest;
 
         public void Start ()
         {
@@ -54,7 +54,7 @@ namespace UniWebServer
             lock (mainThreadRequests) {
                 while (mainThreadRequests.Count > 0) {
                     var req = mainThreadRequests.Dequeue ();
-                    var res = new Response ();
+                    var res = new HttpResponse ();
                     ProcessRequest (req, res);
                 }
             }
@@ -138,13 +138,13 @@ namespace UniWebServer
                     mainThreadRequests.Enqueue (req);
                 }
             } else {
-                var response = new Response ();
+                var response = new HttpResponse ();
                 ProcessRequest (req, response);
             }
             
         }
 
-        void ProcessRequest (HttpRequest request, Response response)
+        void ProcessRequest (HttpRequest request, HttpResponse response)
         {
             if (HandleRequest != null) {
                 HandleRequest (request, response);
