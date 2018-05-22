@@ -19,6 +19,10 @@ namespace UniWebServer
 
         public event System.Action<HttpRequest,HttpResponse> HandleRequest;
 
+        Queue<HttpRequest> mainThreadRequests;
+        ThreadedTaskQueue taskq;
+        TcpListener listener;
+
         public void Start ()
         {
             listener = new TcpListener (System.Net.IPAddress.Any, port);
@@ -162,11 +166,5 @@ namespace UniWebServer
             }
         }
 
-        Queue<HttpRequest> mainThreadRequests;
-        ThreadedTaskQueue taskq;
-        TcpListener listener;
     }
-
-
-  
 }
