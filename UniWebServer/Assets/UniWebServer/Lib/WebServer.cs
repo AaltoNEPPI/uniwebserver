@@ -95,16 +95,15 @@ namespace UniWebServer
 
         void ServeHTTP (TcpClient tc)
         {
-            
             var stream = tc.GetStream ();
             var line = ReadLine(stream);
-            
+
             if (line == null)
                 return;
             var top = line.Trim ().Split (' ');
             if (top.Length != 3)
                 return;
-           
+
             var req = new HttpRequest (stream) {
                 HttpMethod = top [0], RawUrl = top [1], protocol = top [2]
             };
@@ -141,7 +140,7 @@ namespace UniWebServer
             if (contentTypes != null && Array.IndexOf(contentTypes, "multipart/form-data") >= 0) {
                 req.formData = MultiPartEntry.Parse (req);
             }
-            
+
             if (processRequestsInMainThread) {
                 lock (mainThreadRequests) {
                     mainThreadRequests.Enqueue (req);
@@ -149,7 +148,6 @@ namespace UniWebServer
             } else {
                 ProcessRequest (req);
             }
-            
         }
 
         void ProcessRequest (HttpRequest request)
