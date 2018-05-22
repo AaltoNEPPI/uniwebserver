@@ -106,7 +106,7 @@ namespace UniWebServer
             if (top.Length != 3)
                 return;
            
-            var req = new HttpRequest () {
+            var req = new HttpRequest (stream) {
                 HttpMethod = top [0], RawUrl = top [1], protocol = top [2]
             };
             // XXX: Should use a regex to check for the scheme, could also be e.g. https://
@@ -124,8 +124,6 @@ namespace UniWebServer
                 req.Headers.AddHeaderLine(headerline);
             }
 
-            
-            req.InputStream = stream;
             string contentLength = req.Headers.Get("Content-Length");
             if (contentLength != null) {
                 var count = int.Parse (contentLength);

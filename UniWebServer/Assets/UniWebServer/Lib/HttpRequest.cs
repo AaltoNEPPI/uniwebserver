@@ -19,8 +19,13 @@ namespace UniWebServer
         public Uri Url;
         public Headers Headers = new Headers ();
         public string body;
-        public NetworkStream InputStream;
+        public readonly Stream InputStream;
         public Dictionary<string, MultiPartEntry> formData = null;
+
+        public HttpRequest(Stream stream)
+        {
+            InputStream = stream;
+        }
 
         public void Write (HttpResponse response)
         {
