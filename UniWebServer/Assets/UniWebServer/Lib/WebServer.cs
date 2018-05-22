@@ -58,8 +58,7 @@ namespace UniWebServer
             lock (mainThreadRequests) {
                 while (mainThreadRequests.Count > 0) {
                     var req = mainThreadRequests.Dequeue ();
-                    var res = new HttpResponse ();
-                    ProcessRequest (req, res);
+                    ProcessRequest (req);
                 }
             }
         }
@@ -148,14 +147,14 @@ namespace UniWebServer
                     mainThreadRequests.Enqueue (req);
                 }
             } else {
-                var response = new HttpResponse ();
-                ProcessRequest (req, response);
+                ProcessRequest (req);
             }
             
         }
 
-        void ProcessRequest (HttpRequest request, HttpResponse response)
+        void ProcessRequest (HttpRequest request)
         {
+            var response = new HttpResponse ();
             if (HandleRequest != null) {
                 HandleRequest (request, response);
             }
