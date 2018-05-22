@@ -70,7 +70,7 @@ namespace UniWebServer
             while (true) {
                 try {
                     var tc = listener.AcceptTcpClient ();
-					taskq.PushTask (() => ServeHTTP (tc));
+                    taskq.PushTask (() => ServeHTTP (tc));
                 } catch (SocketException) {
                     break;
                 }
@@ -120,11 +120,11 @@ namespace UniWebServer
             if (contentLength != null) {
                 var count = int.Parse (contentLength);
                 var bytes = new byte[count];
-				var offset = 0;
-				while (count > 0) {
-					offset = stream.Read (bytes, offset, count);
-					count -= offset;
-				}
+                var offset = 0;
+                while (count > 0) {
+                    offset = stream.Read (bytes, offset, count);
+                    count -= offset;
+                }
                 req.body = System.Text.Encoding.UTF8.GetString(bytes);
             }
 

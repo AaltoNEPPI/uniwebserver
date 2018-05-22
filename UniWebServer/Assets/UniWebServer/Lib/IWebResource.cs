@@ -1,12 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-
 namespace UniWebServer
 {
-	public interface IWebResource
-	{
+    public interface IWebResource
+    {
         void HandleRequest(HttpRequest request, Response response);
-	}
-
+    }
 }
