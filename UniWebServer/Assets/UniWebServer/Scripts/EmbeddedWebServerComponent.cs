@@ -48,12 +48,7 @@ namespace UniWebServer
         void HandleRequest (HttpRequest request, HttpResponse response)
         {
             if (resources.ContainsKey (request.Url.LocalPath)) {
-                try {
-                    resources [request.Url.LocalPath].HandleRequest (request, response);
-                } catch (Exception e) {
-                    response.StatusCode = 500;
-                    response.Write (e.Message);
-                }
+		resources [request.Url.LocalPath].HandleRequest (request, response);
             } else {
                 response.StatusCode = 404;
                 response.StatusDescription = "Not Found.";

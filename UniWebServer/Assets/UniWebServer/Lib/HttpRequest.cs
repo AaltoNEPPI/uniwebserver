@@ -19,24 +19,12 @@ namespace UniWebServer
         public Uri Url;
         public Headers Headers = new Headers ();
         public string body;
-        public readonly Stream InputStream;
+        public readonly HttpStream InputStream;
         public Dictionary<string, MultiPartEntry> formData = null;
 
-        public HttpRequest(Stream stream)
+        public HttpRequest(HttpStream stream)
         {
             InputStream = stream;
-        }
-
-        public void Write (HttpResponse response)
-        {
-            StreamWriter writer = new StreamWriter (InputStream);
-            Headers.Set("Connection", "Close");
-            Headers.Set("Content-Length", response.stream.Length);
-            writer.Write ("HTTP/1.1 {0} {1}\r\n{2}\r\n\r\n", response.StatusCode, response.StatusDescription, response.Headers);
-            response.stream.Seek(0, SeekOrigin.Begin);
-            StreamReader reader = new StreamReader (response.stream);
-            writer.Write(reader.ReadToEnd());
-            writer.Flush();
         }
 
         public void Close ()

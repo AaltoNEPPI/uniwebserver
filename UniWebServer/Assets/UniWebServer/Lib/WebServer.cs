@@ -72,8 +72,8 @@ namespace UniWebServer
         {
             while (true) {
                 try {
-                    var tc = listener.AcceptTcpClient ();
-                    taskq.PushTask (() => ServeHTTP (tc));
+                    var sock = listener.AcceptSocket ();
+                    taskq.PushTask (() => ServeHTTP (sock));
                 } catch (SocketException) {
                     break;
                 }
@@ -93,9 +93,9 @@ namespace UniWebServer
             return System.Text.Encoding.UTF8.GetString(s.ToArray()).Trim();
         }
 
-        void ServeHTTP (TcpClient tc)
+        void ServeHTTP (Socket sock)
         {
-            var stream = tc.GetStream ();
+            var stream = new HttpStream (sock);
             var line = ReadLine(stream);
 
             if (line == null)
@@ -152,16 +152,27 @@ namespace UniWebServer
 
         void ProcessRequest (HttpRequest request)
         {
-            var response = new HttpResponse ();
+            var writer = new StreamWriter (request.InputStream);
+            var response = new HttpResponse (writer);
+            // XXX refactor, bad encapsulation, circular references
+            request.InputStream.Response = response;
             if (HandleRequest != null) {
-                HandleRequest (request, response);
+                try {
+                    HandleRequest (request, response);
+                } catch (Exception e) {
+                    response.StatusCode = 500;
+                    response.Write (e.Message);
+                }
             }
-            request.Write (response);
+            response.Flush ();
             request.Close ();
-            if (logRequests) {
-                Debug.Log (response.StatusCode + " " + request.RawUrl);
-            }
+            LogRequest (response.StatusCode + " " + request.RawUrl);
         }
 
+        void LogRequest (string message) {
+            if (logRequests) {
+                Debug.Log ("WebServer:" + message);
+            }
+        }
     }
 }
