@@ -20,6 +20,7 @@ namespace UniWebServer
 
         WebServer server;
         Dictionary<string, IWebResource> resources = new Dictionary<string, IWebResource> ();
+        Dictionary<string, IWebResource> directories = new Dictionary<string, IWebResource> ();
 
         void Start ()
         {
@@ -47,13 +48,23 @@ namespace UniWebServer
 
         void HandleRequest (HttpRequest request, HttpResponse response)
         {
-            if (resources.ContainsKey (request.Url.LocalPath)) {
-		resources [request.Url.LocalPath].HandleRequest (request, response);
-            } else {
-                response.StatusCode = 404;
-                response.StatusDescription = "Not Found.";
-                response.Write (request.Url.LocalPath + " not found.");
+            string localPath = request.Url.LocalPath;
+
+            if (resources.ContainsKey (localPath)) {
+                resources [localPath].HandleRequest (request, response);
+                return;
             }
+
+            foreach (string dir in directories.Keys) {
+                if (localPath.StartsWith(dir)) {
+                    directories [dir].HandleRequest (request, response);
+                    return;
+                }
+            }
+
+            response.StatusCode = 404;
+            response.StatusDescription = "NOT FOUND";
+            response.Write (request.Url.LocalPath + " not found.");
         }
 
         public void AddResource (string path, IWebResource resource)
@@ -61,8 +72,9 @@ namespace UniWebServer
             resources [path] = resource;
         }
 
+        public void AddDirectory (string path, IWebResource resource)
+        {
+            directories[path] = resource;
+        }
     }
-
-
-
 }
