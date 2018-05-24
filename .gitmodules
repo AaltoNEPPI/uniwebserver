@@ -1,0 +1,3 @@
+[submodule "Lib/MimeTypeMap"]
+	path = Lib/MimeTypeMap
+	url = git@github.com:AaltoNEPPI/MimeTypeMap.git
