@@ -16,7 +16,7 @@ namespace UniWebServer
         protected EmbeddedWebServerComponent server;
         protected string hostPath;
 
-        void Start()
+        public virtual void Start()
         {
             hostPath = Application.dataPath + dataPath;
             server = GetComponent<EmbeddedWebServerComponent>();
