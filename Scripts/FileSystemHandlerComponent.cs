@@ -13,8 +13,8 @@ namespace UniWebServer
         public string HTTPPath = "/";
         public string dataPath = "/Scripts/uniwebserver/HTML/";
 
-        private EmbeddedWebServerComponent server;
-        private string hostPath;
+        protected EmbeddedWebServerComponent server;
+        protected string hostPath;
 
         void Start()
         {
